@@ -211,6 +211,7 @@ Cada estado foi modelado como uma classe específica, permitindo alterar o compo
 - EmVoo
 - SolicitandoPouso
 - Pousando
+- EmEmergencia
 
 #### Benefícios
 - Eliminação de grandes estruturas condicionais.
@@ -229,15 +230,6 @@ Esse padrão garante que exista apenas uma instância responsável pelo gerencia
 - Controle centralizado.
 - Consistência das informações.
 - Evita múltiplas instâncias conflitantes.
-
----
-
-## Tecnologias Utilizadas
-
-- Python 3
-- Programação Orientada a Objetos
-- UML
-- Padrões de Projeto GoF
 
 ---
 
