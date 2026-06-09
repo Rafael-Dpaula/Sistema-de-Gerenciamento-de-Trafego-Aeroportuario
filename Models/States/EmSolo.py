@@ -7,7 +7,7 @@ class EmSolo(StateAviao):
 
     def solicitarDecolagem(self):
         return informandoControle(
-            AguardandoDecolagem(),
+            AguardandoDecolagem,
             "Controle → {self.__identificador}: Solicitação de decolagem recebida. Aguarde autorização da torre.",
         )
 
@@ -31,6 +31,6 @@ class EmSolo(StateAviao):
 
     def declararEmergencia(self):
         return informandoControle(
-            EmEmergencia(),
+            EmEmergencia,
             "Controle → {self.__identificador}: Emergência registrada. Aguarde instruções da torre.",
         )

@@ -18,7 +18,7 @@ class AguardandoDecolagem(StateAviao):
 
     def decolar(self):
         return informandoControle(
-            EmVoo(),
+            EmVoo,
             "Controle → {self.__identificador}: Decolagem autorizada. Procedimento liberado.",
         )
 
@@ -30,6 +30,6 @@ class AguardandoDecolagem(StateAviao):
 
     def declararEmergencia(self):
         return informandoControle(
-            EmEmergencia(),
+            EmEmergencia,
             "Controle → {self.__identificador}: Emergência registrada. Decolagem cancelada e prioridade operacional concedida.",
         )

@@ -18,7 +18,7 @@ class Privado(Aviao):
         self.modelo = modelo
         self.__status: StateAviao = StateAviao.Em_Solo()
         self.planoVoo: PlanoVoo = planoVoo
-        self.__observadores: Observer = []
+        self.__observadores: list[Observer] = []
         self.proprietario = proprietario
         self.numeroPassageiros = numeroPassageiros
 

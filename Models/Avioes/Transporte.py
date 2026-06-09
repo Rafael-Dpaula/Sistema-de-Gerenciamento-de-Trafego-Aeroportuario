@@ -4,7 +4,7 @@ from Models.Observer.Observer import Observer
 from Models.PlanoVoo import PlanoVoo
 
 
-class Privado(Aviao):
+class Transporte(Aviao):
     def __init__(
         self,
         identificador: str,
@@ -18,7 +18,7 @@ class Privado(Aviao):
         self.modelo = modelo
         self.__status: StateAviao = StateAviao.Em_Solo()
         self.planoVoo: PlanoVoo = planoVoo
-        self.__observadores: Observer = []
+        self.__observadores: list[Observer] = []
         self.tipoCarga = tipoCarga
         self.pesoCarga = pesoCarga
 

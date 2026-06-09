@@ -23,12 +23,12 @@ class SolicitandoPouso(StateAviao):
 
     def pousar(self):
         return informandoControle(
-            Pousando(),
+            Pousando,
             "Controle → {self.__identificador}: Pouso autorizado. Inicie os procedimentos de aproximação.",
         )
     
     def declararEmergencia(self):
         return informandoControle(
-            EmEmergencia(),
+            EmEmergencia,
             "Controle → {self.__identificador}: Emergência declarada. Prioridade máxima de pouso concedida."
         )

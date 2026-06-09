@@ -5,7 +5,7 @@ from Models.States.SolicitandoPouso import SolicitandoPouso
 class EmVoo(StateAviao):
     def solicitarPouso(self):
         return informandoControle(
-            SolicitandoPouso(),
+            SolicitandoPouso,
             "Controle → {self.__identificador}: Solicitação de pouso recebida. Aguarde instruções da torre.",
         )
 
@@ -29,6 +29,6 @@ class EmVoo(StateAviao):
         
     def declararEmergencia(self):
         return informandoControle(
-            EmEmergencia(),
+            EmEmergencia,
             "Controle → {self.__identificador}: Emergência declarada. Prioridade operacional concedida."
         )
