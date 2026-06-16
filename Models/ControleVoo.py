@@ -16,15 +16,13 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
         return cls.__instancia
 
     def __init__(self):
-        if (
-            ControleVoo.__inicializado
-        ):  # verifica se o controle de voo já foi inicializado
+        if (ControleVoo.__inicializado):  # verifica se o controle de voo já foi inicializado
             return  # impede a continuidade caso ele ja tenha sido inicializado antes
 
-        self.historicoContato: list[str] = []
-        self.aeronaves: list[Aviao] = []
-        self.filaPouso: list[Aviao] = []
-        self.filaDecolagem: list[Aviao] = []
+        self.__historicoContato: list[str] = []
+        self.__aeronaves: list[Aviao] = []
+        self.__filaPouso: list[Aviao] = []
+        self.__filaDecolagem: list[Aviao] = []
 
         ControleVoo.__inicializado = True
 
@@ -88,7 +86,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
                 f"ALERT: a aeronave {aviao.identificador} já está na lista de decolagem do controle."
             )
             return
-        return self.__filaDecolagem.remove(aviao)
+        return self.__filaDecolagem.append(aviao)
 
     def autorizarPouso(
         self, aviao: Aviao
@@ -104,7 +102,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
                 f"ALERT: a aeronave {aviao.identificador} não está na lista de pouso do controle."
             )
             return
-        return self.__filaPouso.append(aviao)
+        return self.__filaPouso.remove(aviao)
 
     def autorizarDecolagem(
         self, aviao: Aviao
@@ -117,7 +115,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
             not aviao in self.__filaDecolagem
         ):  # verifica se o objeto Aviao já está na lista de pouso
             print(
-                f"ALERT: a aeronave {aviao.identificador} já está na lista de pouso do controle."
+                f"ALERT: a aeronave {aviao.identificador} não está na lista de decolagem do controle."
             )
             return
         return self.__filaDecolagem.remove(aviao)
@@ -139,7 +137,8 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
     ):  # remove uma aeronave da lista de aeronaves do controle de voo
         if not isinstance(aviao, Aviao):  # valida se a aeronave é uma instancia válida
             raise TypeError("ERROR: o objeto deve ser uma instância válida de Aviao")
-        if not aviao in self.__aeronaves:  # busca se a aeronava está na lista
+        if aviao not in self.__aeronaves:  # busca se a aeronava está na lista
             print(
                 f"ALERT: a aeronave {aviao.identificador} não se encontra na lista de aeronaves do controle"
             )
+            self.__aeronaves.remove(aviao)

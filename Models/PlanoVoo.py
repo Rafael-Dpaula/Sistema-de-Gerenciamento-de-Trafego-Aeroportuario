@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 class PlanoVoo:
     def __init__(
         self,
@@ -46,10 +49,12 @@ class PlanoVoo:
         raise ValueError("ERROR: novoDest não é valido.")
 
     @horarioPartida.setter
-    def horarioPartida(self, novaPartida):
-        if novaPartida is not None:
-            self.__horarioPartida = novaPartida
-        raise ValueError("ERROR: novaPartida não é valido.")
+    def horarioPartida(self, horario: str):
+
+        try:
+            self.__horarioPartida = datetime.strptime(horario, "%H:%M")
+        except ValueError:
+            raise ValueError("Horário inválido. Utilize HH:MM")
 
     @horarioChegada.setter
     def horarioChegada(self, novaChegada):
@@ -64,10 +69,14 @@ class PlanoVoo:
         raise ValueError("ERROR: novaAlt não é valido.")
 
     def validarPlano(self):
-        if self.__origem == self.__destino:
+
+        if self.origem == self.destino:
             return False
-        if self.__horarioChegada <= self.__horarioPartida:
+
+        if self.altitudeCruzeiro <= 0:
             return False
-        if self.__altitudeCruzeiro <= 0:
+
+        if self.horarioChegada <= self.horarioPartida:
             return False
+
         return True
