@@ -1,65 +1,75 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from Models.States.State_Aviao import StateAviao
+from Models.States.EmSolo import EmSolo
+
 from Models.Observer.Observer import Observer
 from Models.PlanoVoo import PlanoVoo
+
 
 
 class Aviao(ABC):  # CLASSE PRINCIPAL DO PROJETO, CENTRO DE TODAS AS OPERAÇÕES
     def __init__(self, identificador: str, modelo: str, planoVoo=None):
         self.identificador = identificador
         self.modelo = modelo
-        self.__status: StateAviao = StateAviao.Em_Solo()
+        self._status: StateAviao = EmSolo()
         self.planoVoo: PlanoVoo = planoVoo
-        self.__observadores: list[Observer] = []
+        self._observadores: list[Observer] = []
 
     @property
     def identificador(self):
-        return self.__identificador
+        return self._identificador
 
     @property
     def modelo(self):
-        return self.__modelo
+        return self._modelo
 
     @property
     def status(self):
-        return self.__status
+        return self._status
 
     @property
     def planoVoo(self):
-        return self.__planoVoo
+        return self._planoVoo
 
     @property
     def observadores(self):
-        return self.__observadores
+        return self._observadores
 
     @identificador.setter
     def identificador(self, novoId):
         if novoId == None:
             raise TypeError("ERROR: o novoID deve ser informado.")
-        self.__identificador = novoId.strip().toUpper()
+        self._identificador = novoId.strip().upper()
 
     @modelo.setter
     def modelo(self, novoModelo):
         if novoModelo == None:
             raise TypeError("ERROR: o novoModelo deve ser informado.")
-        self.__modelo = novoModelo.strip().toUpper()
+        self._modelo = novoModelo.strip().upper()
 
     @planoVoo.setter
     def planoVoo(self, novoPlano):
-        if not isinstance(novoPlano, PlanoVoo):
+        if novoPlano is not None and not isinstance(novoPlano, PlanoVoo):
             raise TypeError(
                 "ERROR: o novoPlano deve ser uma instância válida de PlanoVoo."
             )
+        self._planoVoo = novoPlano
+        
+    ### METODOS
 
-    ###                     METODOS
-
+    def definirPlano(self, plano : PlanoVoo):
+        if plano is None or not isinstance(plano, PlanoVoo):
+            raise TypeError("ERROR: plano de voo inválido.")
+        self._planoVoo = plano
+        print(f"Aeronave {self._identificador} definiu o plano de voo para {plano._destino}. Tempo de viagem estimada: {plano.calcularDuracao()}.")
+        
     def adicionarObserver(
         self, observador
     ):  # adiciona o observador na lista de observadores do aviao
         if isinstance(
             observador, Observer
         ):  # testa se o observador pe um objeto valido
-            self.__observadores.append(observador)  # coloca o observador na lista
+            self._observadores.append(observador)  # coloca o observador na lista
         else:
             raise TypeError(
                 "ERROR: observador não é uma instância de Observer."
@@ -70,13 +80,13 @@ class Aviao(ABC):  # CLASSE PRINCIPAL DO PROJETO, CENTRO DE TODAS AS OPERAÇÕES
     ):  # remove o observador da lista de observadores do aviao
         if (observador, Observer):  # testa se o observador é um objeto valido
             if not any(
-                o == observador for o in self.__observadores
+                o == observador for o in self._observadores
             ):  # faz uma busca se o objeto não está na lista de observadores
                 print(
                     f"ALERT: o observador não foi encontrado na lista de observadores do avião."
                 )
                 return
-            self.__observadores.remove(
+            self._observadores.remove(
                 observador
             )  # remove o observador caso ele seja encontrado
         else:
@@ -86,7 +96,7 @@ class Aviao(ABC):  # CLASSE PRINCIPAL DO PROJETO, CENTRO DE TODAS AS OPERAÇÕES
 
     def notificarObservers(self, mensagem):
         if not mensagem == None:
-            for observers in self.__observadores:
+            for observers in self._observadores:
                 observers.atualizar(self, mensagem)
 
     def alterarStatus(self, estado):
@@ -94,35 +104,37 @@ class Aviao(ABC):  # CLASSE PRINCIPAL DO PROJETO, CENTRO DE TODAS AS OPERAÇÕES
             estado, StateAviao
         ):  # verifica se estado e uma instancia valida de StateAviao
             raise TypeError("ERROR: estado não é uma instancia válida de StateAviao.")
-        self.__status = estado
-        self.notificarObservers(
-            f"Aeronave {self.__identificador} mudou para " f"{type(estado).__name__}",
-        )  # informa a mudança do status aos observadores
+        self._status = estado
+        msg = f"Aeronave {self._identificador} mudou para " f"{type(estado).__name__}"
+        self.notificarObservers(msg)  # informa a mudança do status aos observadores
 
     def solicitarPouso(self):  # pedido da aeronave para a torre para pousar
-        resultado = self.__status.solicitarPouso()
+        resultado = self._status.solicitarPouso()
         self.alterarStatus(resultado.estado)
         return resultado.mensagem
 
     def solicitarDecolagem(self):  # pedido da aeronave para a torre para decolagem
-        resultado = self.__status.solicitarDecolagem()
+        if self._planoVoo is None:
+            print("ALERT: defina o plano de voo antes da decolagem.")
+            return ""
+        resultado = self._status.solicitarDecolagem()
         self.alterarStatus(resultado.estado)
         return resultado.mensagem
 
     def pousar(self):  # informando a torre que esta pousando
-        resultado = self.__status.pousar()
+        resultado = self._status.pousar()
         self.alterarStatus(resultado.estado)
         return resultado.mensagem
 
     def decolar(self):  # informando a torre que esta decolando
-        resultado = self.__status.decolar()
+        resultado = self._status.decolar()
         self.alterarStatus(resultado.estado)
         return resultado.mensagem
 
     def declararEmergencia(
         self,
     ):  # informa a torre que a aeronave está em estado de emergencia e necessita de prioridade
-        resultado = self.__status.declararEmergencia()
+        resultado = self._status.declararEmergencia()
         self.alterarStatus(resultado.estado)
         return resultado.mensagem
 

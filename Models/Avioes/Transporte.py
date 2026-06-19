@@ -1,5 +1,6 @@
 from Models.Avioes.Aviao import Aviao
 from Models.States.State_Aviao import StateAviao
+from Models.States import *
 from Models.Observer.Observer import Observer
 from Models.PlanoVoo import PlanoVoo
 
@@ -16,60 +17,57 @@ class Transporte(Aviao):
         super().__init__(identificador, modelo, planoVoo)
         self.identificador = identificador
         self.modelo = modelo
-        self.__status: StateAviao = StateAviao.Em_Solo()
         self.planoVoo: PlanoVoo = planoVoo
-        self.__observadores: list[Observer] = []
+        self._observadores: list[Observer] = []
         self.tipoCarga = tipoCarga
         self.pesoCarga = pesoCarga
 
     @property
     def tipoCarga(self):
-        return self.__tipoCarga
+        return self._tipoCarga
 
     @property
     def pesoCarga(self):
-        return self.__pesoCarga
+        return self._pesoCarga
 
     @tipoCarga.setter
     def tipoCarga(self, novoTipo):
         if novoTipo == None:
             raise TypeError("ERROR: novaComp não é uma string válida.")
-        self.__tipoCarga = novoTipo
+        self._tipoCarga = novoTipo
 
     @pesoCarga.setter
     def pesoCarga(self, novoPeso):
         if not isinstance(novoPeso, float) or novoPeso < 0:
             raise Exception("ERROR: novoPeso não é um float válido.")
-        self.__pesoCarga = novoPeso
+        self._pesoCarga = novoPeso
 
     def __str__(self):
-
         msg = (
             "======== COMERCIAL ========\n"
-            f"ID: {self.__identificador}\n"
-            f"Modelo: {self.__modelo}\n"
-            f"Status: {type(self.__status).__name__}\n"
+            f"ID: {self._identificador}\n"
+            f"Modelo: {self._modelo}\n"
+            f"Status: {type(self._status).__name__}\n"
         )
 
-        if self.__planoVoo is not None:
-
+        if self._planoVoo is not None:
             msg += (
                 "Plano de Voo:\n"
-                f"  Origem: {self.__planoVoo.__origem}\n"
-                f"  Destino: {self.__planoVoo.__destino}\n"
-                f"  Horário Partida: {self.__planoVoo.__horarioPartida}\n"
-                f"  Horário Chegada: {self.__planoVoo.__horarioChegada}\n"
-                f"  Altitude de Cruzeiro: {self.__planoVoo.__altitudeCruzeiro}\n"
+                f"  Origem: {self._planoVoo._origem}\n"
+                f"  Destino: {self._planoVoo._destino}\n"
+                f"  Horário Partida: {self._planoVoo._horarioPartida}\n"
+                f"  Horário Chegada: {self._planoVoo._horarioChegada}\n"
+                f"  Altitude de Cruzeiro: {self._planoVoo._altitudeCruzeiro}\n"
             )
-
         else:
             msg += "Plano de Voo: nenhum\n"
 
         msg += (
-            f"Observadores: {[type(obs).__name__ for obs in self.__observers]}\n"
-            f"Tipo da Carga: {self.__tipoCarga}\n"
-            f"Peso da Carga: {self.__pesoCarga}\n"
+            f"Observadores: {[type(obs).__name__ for obs in self._observadores]}\n"
+            f"Tipo da Carga: {self._tipoCarga}\n"
+            f"Peso da Carga: {self._pesoCarga}\n"
             "==========================="
         )
 
         return msg
+

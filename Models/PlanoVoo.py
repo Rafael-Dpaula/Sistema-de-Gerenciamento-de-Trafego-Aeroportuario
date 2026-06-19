@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class PlanoVoo:
@@ -18,58 +18,68 @@ class PlanoVoo:
 
     @property
     def origem(self):
-        return self.__origem
+        return self._origem
 
     @property
     def destino(self):
-        return self.__destino
+        return self._destino
 
     @property
     def horarioPartida(self):
-        return self.__horarioPartida
+        return self._horarioPartida
 
     @property
     def horarioChegada(self):
-        return self.__horarioChegada
+        return self._horarioChegada
 
     @property
     def altitudeCruzeiro(self):
-        return self.__altitudeCruzeiro
+        return self._altitudeCruzeiro
 
     @origem.setter
     def origem(self, novaOri):
-        if novaOri is not None:
-            self.__origem = novaOri
-        raise ValueError("ERROR: novaOri não é valido.")
+        if novaOri is None:
+            raise ValueError("ERROR: novaOri não é valido.")
+        self._origem = novaOri
 
     @destino.setter
     def destino(self, novoDest):
-        if novoDest is not None:
-            self.__destino = novoDest
-        raise ValueError("ERROR: novoDest não é valido.")
+        if novoDest is None:
+            raise ValueError("ERROR: novoDest não é valido.")
+        self._destino = novoDest
 
     @horarioPartida.setter
-    def horarioPartida(self, horario: str):
-
+    def horarioPartida(self, novoHorario: str):
         try:
-            self.__horarioPartida = datetime.strptime(horario, "%H:%M")
+            self._horarioPartida = datetime.strptime(novoHorario, "%H:%M").time()
         except ValueError:
             raise ValueError("Horário inválido. Utilize HH:MM")
 
     @horarioChegada.setter
-    def horarioChegada(self, novaChegada):
-        if novaChegada is not None:
-            self.__horarioChegada = novaChegada
-        raise ValueError("ERROR: novaChegada não é valido.")
+    def horarioChegada(self, novoHorario):
+        try:
+            self._horarioChegada = datetime.strptime(novoHorario, "%H:%M").time()
+        except ValueError:
+            raise ValueError("Horário inválido. Utilize HH:MM")
 
     @altitudeCruzeiro.setter
     def altitudeCruzeiro(self, novaAlt):
-        if isinstance(novaAlt, int) and novaAlt is not None:
-            self.__altitudeCruzeiro = novaAlt
-        raise ValueError("ERROR: novaAlt não é valido.")
+        if not isinstance(novaAlt, int) or novaAlt is None:
+            raise ValueError("ERROR: novaAlt não é valido.")
+        self._altitudeCruzeiro = novaAlt
+
+    def __str__(self):
+        return (
+            "====== PLANO VOO =====\n"
+            f"Origem = {self._origem}\n"
+            f"Destino = {self._destino}\n"
+            f"Horario de partida = {self._horarioPartida}\n"
+            f"Horario de chegada = {self._horarioChegada}\n"
+            f"Altitude de Cruzeiro = {self._altitudeCruzeiro}\n"
+            "======================\n"
+        )
 
     def validarPlano(self):
-
         if self.origem == self.destino:
             return False
 
@@ -80,3 +90,11 @@ class PlanoVoo:
             return False
 
         return True
+    
+    def calcularDuracao(self):
+        partida = datetime.combine(datetime.today(), self._horarioPartida)
+        chegada = datetime.combine(datetime.today(), self._horarioChegada)
+        if chegada < partida:
+            chegada += timedelta(days=1)
+        return chegada - partida
+

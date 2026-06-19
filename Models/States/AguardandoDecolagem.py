@@ -1,6 +1,4 @@
 from Models.States.State_Aviao import StateAviao, informandoControle
-from Models.States.EmEmergencia import EmEmergencia
-from Models.States.EmVoo import EmVoo
 
 class AguardandoDecolagem(StateAviao):
 
@@ -17,8 +15,9 @@ class AguardandoDecolagem(StateAviao):
         )
 
     def decolar(self):
+        from Models.States.EmVoo import EmVoo
         return informandoControle(
-            EmVoo,
+            EmVoo(),
             "Controle → {self.__identificador}: Decolagem autorizada. Procedimento liberado.",
         )
 
@@ -29,7 +28,8 @@ class AguardandoDecolagem(StateAviao):
         )
 
     def declararEmergencia(self):
+        from Models.States.EmEmergencia import EmEmergencia
         return informandoControle(
-            EmEmergencia,
+            EmEmergencia(),
             "Controle → {self.__identificador}: Emergência registrada. Decolagem cancelada e prioridade operacional concedida.",
         )

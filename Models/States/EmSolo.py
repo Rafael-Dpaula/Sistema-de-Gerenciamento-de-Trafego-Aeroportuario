@@ -1,13 +1,12 @@
 from Models.States.State_Aviao import StateAviao, informandoControle
-from Models.States.EmEmergencia import EmEmergencia
-from Models.States.AguardandoDecolagem import AguardandoDecolagem
 
 
 class EmSolo(StateAviao):
 
     def solicitarDecolagem(self):
+        from Models.States.AguardandoDecolagem import AguardandoDecolagem
         return informandoControle(
-            AguardandoDecolagem,
+            AguardandoDecolagem(),
             "Controle → {self.__identificador}: Solicitação de decolagem recebida. Aguarde autorização da torre.",
         )
 
@@ -30,7 +29,8 @@ class EmSolo(StateAviao):
         )
 
     def declararEmergencia(self):
+        from Models.States.EmEmergencia import EmEmergencia
         return informandoControle(
-            EmEmergencia,
+            EmEmergencia(),
             "Controle → {self.__identificador}: Emergência registrada. Aguarde instruções da torre.",
         )

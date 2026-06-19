@@ -10,11 +10,11 @@ class CentroOperacional:
 
     @property
     def aeroporto(self):
-        return self.__aeroporto
+        return self._aeroporto
 
     @property
     def controleVoo(self):
-        return self.__controleVoo
+        return self._controleVoo
 
     @aeroporto.setter
     def aeroporto(self, novoAero):
@@ -22,7 +22,7 @@ class CentroOperacional:
             raise ValueError(
                 "ERROR: novoAero não é uma instância válida de Aeroporto."
             )
-        self.__aeroporto = novoAero
+        self._aeroporto = novoAero
 
     @controleVoo.setter
     def controleVoo(self, novoControle):
@@ -30,34 +30,34 @@ class CentroOperacional:
             raise ValueError(
                 "ERROR: novoControle não é uma instância válida de ControleVoo."
             )
-        self.__controleVoo = novoControle
+        self._controleVoo = novoControle
 
     def autorizarPouso(self, aviao: Aviao):
-        if aviao not in self.__controleVoo.filaPouso:
-            print(f"ALERT: a aeronave {aviao.identificador} não está na fila de pouso.")
+        if aviao not in self._controleVoo._filaPouso:
+            print(f"ALERT: a aeronave {aviao._identificador} não está na fila de pouso.")
             return
-        pista = self.__aeroporto.buscarPistaDisponivel()
+        pista = self._aeroporto.buscarPistaDisponivel()
         if pista is None:
             print("ALERT: não existem pistas disponíveis.")
             return
         pista.ocupar(aviao)
-        self.__controleVoo.autorizarPouso(aviao)
+        self._controleVoo.autorizarPouso(aviao)
         print(aviao.pousar())
         return pista
 
     def autorizarDecolagem(self, aviao: Aviao):
-        if aviao not in self.__controleVoo.filaDecolagem:
+        if aviao not in self._controleVoo._filaDecolagem:
             print(
-                f"ALERT: a aeronave {aviao.identificador} não está na fila de decolagem."
+                f"ALERT: a aeronave {aviao._identificador} não está na fila de decolagem."
             )
             return
-        pista = self.__aeroporto.buscarPistaDisponivel()
+        pista = self._aeroporto.buscarPistaDisponivel()
         if pista is None:
             print("ALERT: não existem pistas disponíveis.")
             return
         plataformaUtilizada = None
-        for plataforma in self.__aeroporto.plataformas:
-            if plataforma.aviao == aviao:
+        for plataforma in self._aeroporto._plataformas:
+            if plataforma._aviao == aviao:
                 plataformaUtilizada = plataforma
                 break
         if plataformaUtilizada is None:
@@ -65,18 +65,18 @@ class CentroOperacional:
             return
         plataformaUtilizada.liberar()
         pista.ocupar(aviao)
-        self.__controleVoo.autorizarDecolagem(aviao)
+        self._controleVoo.autorizarDecolagem(aviao)
         print(aviao.decolar())
         return pista
     
     def processarPouso(self, aviao: Aviao):
-        plataforma = self.__aeroporto.buscarPlataformaDisponivel()
+        plataforma = self._aeroporto.buscarPlataformaDisponivel()
         if plataforma is None:
             print("ALERT: não existem plataformas disponíveis.")
             return
         pistaUtilizada = None
-        for pista in self.__aeroporto.pistas:
-            if pista.aviao == aviao:
+        for pista in self._aeroporto._pistas:
+            if pista._aviao == aviao:
                 pistaUtilizada = pista
                 break
         if pistaUtilizada is None:
@@ -92,8 +92,8 @@ class CentroOperacional:
                 "ERROR: aviao não é uma instância válida de Aviao."
             )
         pistaUtilizada = None
-        for pista in self.__aeroporto.pistas:
-            if pista.aviao == aviao:
+        for pista in self._aeroporto._pistas:
+            if pista._aviao == aviao:
                 pistaUtilizada = pista
                 break
         if pistaUtilizada is None:

@@ -1,9 +1,6 @@
 from abc import ABC, abstractmethod
 
-class StateAviao(ABC): # CLASSE GERAL DO STATE
-    def __init__(self, state):
-        self.state = state
-    
+class StateAviao(ABC): # CLASSE GERAL DO STATE    
     @abstractmethod
     def solicitarPouso(self):
         pass

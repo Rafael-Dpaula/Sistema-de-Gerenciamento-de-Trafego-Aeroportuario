@@ -1,6 +1,4 @@
 from Models.States.State_Aviao import StateAviao, informandoControle
-from Models.States.EmEmergencia import EmEmergencia
-from Models.States.Pousando import Pousando
 
 class SolicitandoPouso(StateAviao):
     def solicitarPouso(self):
@@ -22,13 +20,15 @@ class SolicitandoPouso(StateAviao):
         )
 
     def pousar(self):
+        from Models.States.Pousando import Pousando
         return informandoControle(
-            Pousando,
+            Pousando(),
             "Controle → {self.__identificador}: Pouso autorizado. Inicie os procedimentos de aproximação.",
         )
     
     def declararEmergencia(self):
+        from Models.States.EmEmergencia import EmEmergencia
         return informandoControle(
-            EmEmergencia,
+            EmEmergencia(),
             "Controle → {self.__identificador}: Emergência declarada. Prioridade máxima de pouso concedida."
         )
