@@ -58,6 +58,9 @@ class Aeroporto:
         else:
             raise ValueError("ERROR: novaCidade não é valida.")
 
+    def __str__(self):
+        return f"====== AEROPORTO =====\nNome = {self._nome}\nCodigo = {self._codigo}\nCidade = {self._cidade}\nPistas = {[f"{p._codigo} | Vazia" if p._aviao is None else f"{p._codigo}|{p._aviao._identificador}" for p in self._pistas]}\nPlataformas = {[f"{p._codigo} | Vazia" if p._aviao is None else f"{p._codigo}|{p._aviao._identificador}" for p in self._plataformas]}\n======================\n"
+
     def adicionarPista(self, pista: Pista):
         if pista is None or not isinstance(pista, Pista):
             raise ValueError("ERROR: pista não é uma instancia válida de Pista.")

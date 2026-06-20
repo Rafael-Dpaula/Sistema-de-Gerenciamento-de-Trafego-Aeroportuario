@@ -18,6 +18,13 @@ class Plataforma:
             self._codigo = novoCodigo
         else:
             raise ValueError("ERROR: novoCodigo não é válido.")
+        
+    @aviao.setter
+    def aviao(self, novoAvi):
+        if not novoAvi is None and isinstance(novoAvi, Aviao):
+            self._codigo = novoAvi
+        else:
+            raise ValueError("ERROR: novoAvi não é válido.")
 
     def __str__(self):
         return (
