@@ -1,4 +1,3 @@
-from Models.ControleVoo import ControleVoo
 from Models.Pista import Pista
 from Models.Plataforma import Plataforma
 class Aeroporto:
@@ -6,7 +5,6 @@ class Aeroporto:
         self.nome = nome
         self.codigo = codigo
         self.cidade = cidade
-        self._controleVoo: ControleVoo = ControleVoo()
         self._pistas: list[Pista] = []
         self._plataformas: list[Plataforma] = []
 
@@ -24,11 +22,6 @@ class Aeroporto:
     @property
     def cidade(self):
         return self._cidade
-
-
-    @property
-    def controleVoo(self):
-        return self._controleVoo
 
 
     @property
