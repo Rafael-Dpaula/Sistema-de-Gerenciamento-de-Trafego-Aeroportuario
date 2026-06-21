@@ -5,30 +5,30 @@ class EmEmergencia(StateAviao):
         from Models.States.Pousando import Pousando
         return informandoControle(
             Pousando(),
-            "Controle → {self.__identificador}: Pouso emergencial autorizado. Prioridade máxima concedida.",
+            f"Pouso emergencial autorizado. Prioridade máxima concedida.",
         )
 
     def solicitarDecolagem(self):
         return informandoControle(
             self,
-            "Controle → {self.__identificador}: Operação inválida. A aeronave encontra-se em situação de emergência.",
+            f"Operação inválida. A aeronave encontra-se em situação de emergência.",
         )
 
     def decolar(self):
         return informandoControle(
             self,
-            "Controle → {self.__identificador}: Operação inválida. A aeronave encontra-se em situação de emergência.",
+            f"Operação inválida. A aeronave encontra-se em situação de emergência.",
         )
 
     def pousar(self):
         return informandoControle(
             self,
-            "Controle → {self.__identificador}: Operação inválida. Solicite pouso emergencial antes de iniciar a aproximação.",
+            f"Operação inválida. Solicite pouso emergencial antes de iniciar a aproximação.",
         )
 
     def declararEmergencia(self):
         from Models.States.EmEmergencia import EmEmergencia
         return informandoControle(
             EmEmergencia(),
-            "Controle → {self.__identificador}: Emergência já registrada. Prioridade máxima mantida.",
+            f"Emergência já registrada. Prioridade máxima mantida.",
         )

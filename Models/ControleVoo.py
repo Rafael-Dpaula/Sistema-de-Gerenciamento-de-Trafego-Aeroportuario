@@ -44,6 +44,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
         return False
 
     def atualizar(self, origem, notificacao):
+        self._historicoContato.append(notificacao)
         print(notificacao)
         if (
             type(origem._status).__name__ == "EmEmergencia"
@@ -58,7 +59,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
             )  # coloca ele como prioridade maxima na fila de pouso
 
 
-
+    #segunda ação de contato, coloca a aeronave na lista de pouso
     def solicitarPouso(
         self, aviao: Aviao
     ):  # solicita para torre a permissao para pouso e adiciona o aviao na lista de espera para pousar
@@ -74,9 +75,10 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
                 f"ALERT: a aeronave {aviao.identificador} já está na lista de pouso do controle."
             )
             return
+        print(f"Controle → {aviao._identificador}: Pouso solicitado.")
         return self._filaPouso.append(aviao)
 
-
+    #segunda ação de contato, coloca a aeronave na lista de decolagem
     def solicitarDecolagem(
         self, aviao: Aviao
     ):  # solicita para torre a permissao para decolar e adiciona o aviao na lista de espera para decolagem
@@ -92,6 +94,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
                 f"ALERT: a aeronave {aviao.identificador} já está na lista de decolagem do controle."
             )
             return
+        print(f"Controle → {aviao._identificador}: Decolagem solicitada.")
         return self._filaDecolagem.append(aviao)
 
 
@@ -157,3 +160,5 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
             )
             self._aeronaves.remove(aviao)
 
+    def __str__(self):
+        return f"===== CONTROLE DE VOO =====\nHistorico de contato: {[h for h in self._historicoContato]}\nAeronaves: {[a._identificador for a in self._aeronaves]}\nFila de Pouso: {[fp._identificador for fp in self._filaPouso]}\nFila de Decolagem: {[fd._identificador for fd in self._filaDecolagem]}\n==========================="

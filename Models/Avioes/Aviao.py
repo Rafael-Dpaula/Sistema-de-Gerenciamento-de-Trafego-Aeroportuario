@@ -99,44 +99,44 @@ class Aviao(ABC):  # CLASSE PRINCIPAL DO PROJETO, CENTRO DE TODAS AS OPERAÇÕES
             for observers in self._observadores:
                 observers.atualizar(self, mensagem)
 
-    def alterarStatus(self, estado):
+    def alterarStatus(self, resultado):
         if not isinstance(
-            estado, StateAviao
+            resultado.estado, StateAviao
         ):  # verifica se estado e uma instancia valida de StateAviao
             raise TypeError("ERROR: estado não é uma instancia válida de StateAviao.")
-        self._status = estado
-        msg = f"Aeronave {self._identificador} mudou para " f"{type(estado).__name__}"
+        self._status = resultado.estado
+        msg = f"INFORME: Aeronave {self._identificador} mudou para " f"{type(resultado.estado).__name__}"
         self.notificarObservers(msg)  # informa a mudança do status aos observadores
 
     def solicitarPouso(self):  # pedido da aeronave para a torre para pousar
         resultado = self._status.solicitarPouso()
-        self.alterarStatus(resultado.estado)
-        return resultado.mensagem
+        self.alterarStatus(resultado)
+        return f"Controle → {self._identificador}: {resultado.mensagem}"
 
     def solicitarDecolagem(self):  # pedido da aeronave para a torre para decolagem
         if self._planoVoo is None:
             print("ALERT: defina o plano de voo antes da decolagem.")
             return ""
         resultado = self._status.solicitarDecolagem()
-        self.alterarStatus(resultado.estado)
-        return resultado.mensagem
+        self.alterarStatus(resultado)
+        return f"Controle → {self._identificador}: {resultado.mensagem}"
 
     def pousar(self):  # informando a torre que esta pousando
         resultado = self._status.pousar()
-        self.alterarStatus(resultado.estado)
-        return resultado.mensagem
+        self.alterarStatus(resultado)
+        return f"Controle → {self._identificador}: {resultado.mensagem}"
 
     def decolar(self):  # informando a torre que esta decolando
         resultado = self._status.decolar()
-        self.alterarStatus(resultado.estado)
-        return resultado.mensagem
+        self.alterarStatus(resultado)
+        return f"Controle → {self._identificador}: {resultado.mensagem}"
 
     def declararEmergencia(
         self,
     ):  # informa a torre que a aeronave está em estado de emergencia e necessita de prioridade
         resultado = self._status.declararEmergencia()
-        self.alterarStatus(resultado.estado)
-        return resultado.mensagem
+        self.alterarStatus(resultado)
+        return f"Controle → {self._identificador}: {resultado.mensagem}"
 
     def __str__(ABC):
         pass

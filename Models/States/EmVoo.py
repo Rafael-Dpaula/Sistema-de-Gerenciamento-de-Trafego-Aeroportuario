@@ -5,30 +5,30 @@ class EmVoo(StateAviao):
         from Models.States.SolicitandoPouso import SolicitandoPouso
         return informandoControle(
             SolicitandoPouso(),
-            "Controle → {self.__identificador}: Solicitação de pouso recebida. Aguarde instruções da torre.",
+            f"Solicitação de pouso recebida. Aguarde instruções da torre.",
         )
 
     def solicitarDecolagem(self):
         return informandoControle(
             self,
-            "Controle → {self.__identificador}: Operação inválida. A aeronave já se encontra em voo.",
+            f"Operação inválida. A aeronave já se encontra em voo.",
         )
 
     def decolar(self):
         return informandoControle(
             self,
-            "Controle → {self.__identificador}: Operação inválida. A aeronave já se encontra em voo.",
+            f"Operação inválida. A aeronave já se encontra em voo.",
         )
 
     def pousar(self):
         return informandoControle(
             self,
-            "Controle → {self.__identificador}: Operação inválida. Solicite autorização de pouso primeiro.",
+            f"Operação inválida. Solicite autorização de pouso primeiro.",
         )
         
     def declararEmergencia(self):
         from Models.States.EmEmergencia import EmEmergencia
         return informandoControle(
             EmEmergencia(),
-            "Controle → {self.__identificador}: Emergência declarada. Prioridade operacional concedida."
+            f"Emergência declarada. Prioridade operacional concedida."
         )

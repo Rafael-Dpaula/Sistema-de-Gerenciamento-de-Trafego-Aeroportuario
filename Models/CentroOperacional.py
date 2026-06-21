@@ -42,7 +42,7 @@ class CentroOperacional:
             return
         pista.ocupar(aviao)
         self._controleVoo.autorizarPouso(aviao)
-        print(aviao.pousar())
+        print(f"Controle → {aviao._identificador}: Pouso autorizado e pista liberada. Desça com cuidado!")
         return pista
 
     def autorizarDecolagem(self, aviao: Aviao):
@@ -66,7 +66,7 @@ class CentroOperacional:
         plataformaUtilizada.liberar()
         pista.ocupar(aviao)
         self._controleVoo.autorizarDecolagem(aviao)
-        print(aviao.decolar())
+        print(f"Controle → {aviao._identificador}: Decolagem autorizada. Taxeie até a pista reservada.")
         return pista
     
     def processarPouso(self, aviao: Aviao):
@@ -84,6 +84,7 @@ class CentroOperacional:
             return
         print(aviao.pousar())
         plataforma.ocupar(aviao)
+        print(f"Controle → {aviao._identificador}: Excelente pouso! Plataforma reservada, taxeie até o destino.")
         pistaUtilizada.liberar()
         
     def processarDecolagem(self, aviao: Aviao):
@@ -100,4 +101,8 @@ class CentroOperacional:
             print("ALERT: aeronave não está ocupando nenhuma pista.")
             return
         print(aviao.decolar())
+        print(f"Controle → {aviao._identificador}: Excelente decolagem. Tenha um bom voo!")
         pistaUtilizada.liberar()
+
+    def __str__(self):
+        return f"===== CENTRO OPERACIONAL =====\n{self._aeroporto.__str__()}\n{self._controleVoo.__str__()}\n=============================="
