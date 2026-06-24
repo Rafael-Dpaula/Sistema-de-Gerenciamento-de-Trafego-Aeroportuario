@@ -12,9 +12,9 @@ O sistema modela o ambiente operacional de um aeroporto, permitindo o gerenciame
 
 > Inserir a imagem UML presente no repositório.
 
-```md
+
 ![Diagrama UML](./docs/uml.png)
-```
+
 
 ---
 
