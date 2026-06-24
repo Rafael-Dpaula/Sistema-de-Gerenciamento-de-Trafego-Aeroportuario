@@ -2,16 +2,17 @@ from Models.States.State_Aviao import StateAviao, informandoControle
 
 class EmEmergencia(StateAviao):
     def solicitarPouso(self):
-        from Models.States.Pousando import Pousando
+        from Models.States.SolicitandoPouso import SolicitandoPouso
         return informandoControle(
-            Pousando(),
+            SolicitandoPouso(),
             f"Pouso emergencial autorizado. Prioridade máxima concedida.",
         )
 
     def solicitarDecolagem(self):
+        from Models.States.AguardandoDecolagem import AguardandoDecolagem
         return informandoControle(
-            self,
-            f"Operação inválida. A aeronave encontra-se em situação de emergência.",
+            AguardandoDecolagem(),
+            f"Problemas solucionados, liberado para decolagem.",
         )
 
     def decolar(self):
