@@ -1,238 +1,523 @@
 # Sistema de Gerenciamento de Tráfego Aeroportuário
 
-## Descrição do Projeto
+## Descrição do Tema e Objetivo
 
-O Sistema de Gerenciamento de Tráfego Aeroportuário tem como objetivo simular o controle operacional de aeronaves em um aeroporto, permitindo o gerenciamento de pousos, decolagens, pistas, plataformas e planos de voo.
+Este projeto consiste em um Sistema de Gerenciamento de Tráfego Aeroportuário desenvolvido em Python com foco na aplicação de Programação Orientada a Objetos (POO) e padrões de projeto.
 
-O sistema foi desenvolvido utilizando Programação Orientada a Objetos (POO) e padrões de projeto da Gang of Four (GoF), visando promover modularidade, reutilização de código e facilidade de manutenção.
-
----
-
-## Objetivos
-
-- Gerenciar aeronaves de diferentes categorias.
-- Controlar pousos e decolagens.
-- Gerenciar pistas e plataformas.
-- Monitorar alterações de estado das aeronaves.
-- Aplicar conceitos de Programação Orientada a Objetos.
-- Implementar padrões de projeto GoF.
+O sistema modela o ambiente operacional de um aeroporto, permitindo o gerenciamento de aeronaves, planos de voo, pousos, decolagens, emergências, pistas e plataformas. O objetivo principal não é a simulação gráfica, mas sim a construção de uma arquitetura orientada a objetos sólida, extensível e aderente às boas práticas de engenharia de software.
 
 ---
 
-## Diagrama de Classes
+# Diagrama de Classes
 
+> Inserir a imagem UML presente no repositório.
+
+```md
 ![Diagrama UML](./docs/uml.png)
+```
 
 ---
 
-## Classes do Sistema
+# Funcionalidades Implementadas
+
+- Cadastro e gerenciamento de aeronaves.
+- Criação de aeronaves por meio de Factory Method.
+- Controle de estados operacionais das aeronaves.
+- Solicitação e autorização de pousos.
+- Solicitação e autorização de decolagens.
+- Tratamento de situações de emergência.
+- Controle de filas de pouso e decolagem.
+- Monitoramento de eventos através do padrão Observer.
+- Gerenciamento de pistas e plataformas.
+- Validação de planos de voo.
+- Centralização do controle de tráfego através de Singleton.
+
+---
+
+# Arquitetura Geral
+
+Fluxo operacional principal:
+
+```text
+Aeronave
+    ↓
+ControleVoo
+    ↓
+CentroOperacional
+    ↓
+Aeroporto
+    ↓
+Pistas e Plataformas
+```
+
+## Responsabilidades
+
+### ControleVoo
+Responsável pelo gerenciamento do tráfego aéreo:
+
+- Controle das filas de pouso.
+- Controle das filas de decolagem.
+- Monitoramento das aeronaves.
+- Priorização automática de emergências.
+
+### CentroOperacional
+Camada intermediária responsável por reduzir o acoplamento entre ControleVoo e Aeroporto.
+
+Funções:
+
+- Autorizar pousos.
+- Autorizar decolagens.
+- Alocar pistas.
+- Alocar plataformas.
+- Processar operações aeroportuárias.
 
 ### Aeroporto
+Responsável exclusivamente pela infraestrutura física:
 
-Responsável por representar o aeroporto e armazenar suas pistas e plataformas.
-
-#### Atributos
-- nome
-- codigo
-- cidade
-
-#### Responsabilidades
-- Gerenciar pistas.
-- Gerenciar plataformas.
+- Armazenar pistas.
+- Armazenar plataformas.
+- Disponibilizar recursos livres.
 
 ---
 
-### Pista
+# Descrição das Classes
 
-Representa uma pista de pouso e decolagem.
+## Aviao (Classe Abstrata)
 
-#### Atributos
-- codigo
-- ocupada
+Classe base de todas as aeronaves.
 
-#### Responsabilidades
-- Indicar disponibilidade para pouso e decolagem.
+### Atributos
 
----
+- identificador
+- modelo
+- status
+- planoVoo
+- observadores
 
-### Plataforma
+### Responsabilidades
 
-Representa uma posição de estacionamento de aeronaves.
-
-#### Atributos
-- numero
-- ocupada
-
-#### Responsabilidades
-- Receber aeronaves após pouso.
-- Disponibilizar aeronaves para decolagem.
+- Gerenciar estado operacional.
+- Gerenciar plano de voo.
+- Notificar observadores.
+- Delegar comportamento ao padrão State.
 
 ---
 
-### PlanoVoo
+## Comercial
 
-Representa as informações operacionais de um voo.
+Especialização de Aviao para transporte de passageiros.
 
-#### Atributos
+### Atributos
+
+- companhiaAerea
+- numeroPassageiros
+
+---
+
+## Privado
+
+Especialização de Aviao para uso particular.
+
+### Atributos
+
+- proprietario
+- numeroPassageiros
+
+---
+
+## Transporte
+
+Especialização de Aviao para transporte de cargas.
+
+### Atributos
+
+- tipoCarga
+- pesoCarga
+
+---
+
+## PlanoVoo
+
+Representa as informações operacionais do voo.
+
+### Atributos
+
 - origem
 - destino
 - horarioPartida
 - horarioChegada
 - altitudeCruzeiro
 
-#### Responsabilidades
-- Armazenar informações de voo.
-- Validar dados do plano de voo.
+### Responsabilidades
+
+- Armazenar dados do voo.
+- Validar consistência do plano.
 
 ---
 
-### Avião
+## ControleVoo
 
-Classe base para todas as aeronaves do sistema.
+Implementa os padrões Observer e Singleton.
 
-#### Atributos
-- identificador
-- modelo
-- estado
-- observadores
+### Responsabilidades
 
-#### Responsabilidades
-- Alterar estado operacional.
-- Notificar observadores.
-- Gerenciar plano de voo.
+- Gerenciar aeronaves.
+- Organizar filas.
+- Priorizar emergências.
+- Receber notificações de mudança de estado.
 
 ---
 
-### Comercial
+## CentroOperacional
 
-Especialização da classe Avião destinada ao transporte de passageiros.
+Responsável pela coordenação entre controle de tráfego e infraestrutura aeroportuária.
 
-#### Atributos
-- companhiaAerea
-- numeroPassageiros
+### Responsabilidades
 
----
-
-### Privado
-
-Especialização da classe Avião destinada ao uso particular.
-
-#### Atributos
-- proprietario
+- Autorizar operações.
+- Gerenciar alocação de recursos.
+- Intermediar comunicação entre os componentes.
 
 ---
 
-### Transporte
+## Aeroporto
 
-Especialização da classe Avião destinada ao transporte de cargas.
+Representa a infraestrutura aeroportuária.
 
-#### Atributos
-- tipoCarga
-- pesoCarga
+### Responsabilidades
 
----
-
-### ControleDeVoo
-
-Responsável pelo gerenciamento do tráfego aeroportuário.
-
-#### Atributos
-- aeronaves
-- pistas
-- filaPouso
-- filaDecolagem
-
-#### Responsabilidades
-- Monitorar aeronaves.
-- Autorizar pousos.
-- Autorizar decolagens.
-- Gerenciar filas de espera.
-- Controlar utilização das pistas.
+- Gerenciar pistas.
+- Gerenciar plataformas.
+- Disponibilizar recursos livres.
 
 ---
 
-## Aplicação dos Pilares da POO
+## Pista
 
-### Encapsulamento
+Representa uma pista operacional.
 
-Os atributos das classes são protegidos e manipulados por métodos específicos, garantindo maior segurança e controle sobre os dados.
+### Responsabilidades
 
-### Herança
-
-As classes Comercial, Privado e Transporte herdam características comuns da classe Avião, evitando duplicação de código.
-
-### Polimorfismo
-
-As aeronaves podem ser tratadas genericamente como objetos do tipo Avião, independentemente de sua especialização.
-
-### Abstração
-
-As classes representam entidades do mundo real, abstraindo apenas as características necessárias para o funcionamento do sistema.
+- Ocupar.
+- Liberar.
+- Verificar disponibilidade.
 
 ---
 
-## Padrões de Projeto Utilizados
+## Plataforma
 
-### Factory Method
+Representa uma posição de estacionamento.
 
-O padrão Factory Method foi utilizado para centralizar a criação de aeronaves.
+### Responsabilidades
 
-A classe FactoryAvioes é responsável por instanciar os diferentes tipos de aeronaves (Comercial, Privado e Transporte), desacoplando a criação dos objetos do restante do sistema.
-
-#### Benefícios
-- Redução de dependências.
-- Facilidade de expansão para novos tipos de aeronaves.
-- Centralização da lógica de criação.
+- Ocupar.
+- Liberar.
+- Verificar disponibilidade.
 
 ---
 
-### Observer
+# Pilares da Programação Orientada a Objetos
 
-O padrão Observer foi utilizado para permitir a comunicação entre as aeronaves e o Controle de Voo.
+## Encapsulamento
 
-Quando uma aeronave altera seu estado operacional, ela notifica automaticamente os observadores registrados, permitindo que o Controle de Voo reaja aos eventos ocorridos.
+Os atributos são protegidos utilizando o padrão:
 
-#### Benefícios
-- Baixo acoplamento.
-- Comunicação automática entre objetos.
-- Facilidade de expansão para novos observadores.
+```python
+_atributo
+```
+
+O acesso é realizado através de properties e métodos específicos.
+
+Benefícios:
+
+- Proteção dos dados.
+- Controle de acesso.
+- Validações centralizadas.
 
 ---
 
-### State
+## Herança
 
-O padrão State foi utilizado para representar os diferentes estados operacionais de uma aeronave.
+As classes:
 
-Cada estado foi modelado como uma classe específica, permitindo alterar o comportamento da aeronave conforme seu estado atual.
+- Comercial
+- Privado
+- Transporte
 
-#### Estados Implementados
+herdam da classe Aviao.
+
+Benefícios:
+
+- Reutilização de código.
+- Redução de duplicação.
+- Facilidade de manutenção.
+
+---
+
+## Polimorfismo
+
+Todas as aeronaves podem ser manipuladas através da abstração Aviao.
+
+Exemplo:
+
+```python
+lista_aeronaves = [Comercial(), Privado(), Transporte()]
+```
+
+---
+
+## Abstração
+
+O sistema modela apenas características relevantes do domínio aeroportuário, ocultando detalhes desnecessários da implementação.
+
+---
+
+# Padrões de Projeto Utilizados
+
+## Factory Method
+
+Classe responsável:
+
+```text
+FactoryAvioes
+```
+
+Objetivo:
+
+Centralizar a criação de aeronaves.
+
+Tipos suportados:
+
+- Comercial
+- Privado
+- Transporte
+
+Vantagens:
+
+- Desacoplamento.
+- Facilidade de expansão.
+- Padronização da criação.
+
+---
+
+## State Pattern
+
+Controla o comportamento operacional das aeronaves.
+
+Estados implementados:
+
 - EmSolo
 - AguardandoDecolagem
+- Decolando
 - EmVoo
 - SolicitandoPouso
 - Pousando
 - EmEmergencia
 
-#### Benefícios
-- Eliminação de grandes estruturas condicionais.
-- Facilidade para adicionar novos estados.
-- Melhor organização do comportamento da aeronave.
+Cada estado implementa:
+
+- solicitarPouso()
+- solicitarDecolagem()
+- decolar()
+- pousar()
+- declararEmergencia()
+
+Benefícios:
+
+- Eliminação de condicionais complexas.
+- Alta coesão.
+- Fácil manutenção.
 
 ---
 
-### Singleton
+## Observer Pattern
 
-O padrão Singleton foi aplicado à classe ControleDeVoo.
+### Observado
 
-Esse padrão garante que exista apenas uma instância responsável pelo gerenciamento do tráfego aeroportuário durante toda a execução do sistema.
+Aviao
 
-#### Benefícios
+### Observador
+
+ControleVoo
+
+Sempre que ocorre uma mudança de estado, os observadores são notificados automaticamente.
+
+Benefícios:
+
+- Baixo acoplamento.
+- Comunicação automática.
+- Fácil expansão.
+
+---
+
+## Singleton Pattern
+
+Aplicado na classe ControleVoo.
+
+Objetivo:
+
+Garantir a existência de apenas uma central de controle durante toda a execução do sistema.
+
+Benefícios:
+
+- Consistência dos dados.
 - Controle centralizado.
-- Consistência das informações.
-- Evita múltiplas instâncias conflitantes.
+- Evita instâncias conflitantes.
 
 ---
 
-## Autor
+# Fluxos Principais
 
-- Rafael Albuquerque de Paula
+## Fluxo de Decolagem
+
+```text
+EmSolo
+   ↓
+AguardandoDecolagem
+   ↓
+Decolando
+   ↓
+EmVoo
+```
+
+## Fluxo de Pouso
+
+```text
+EmVoo
+   ↓
+SolicitandoPouso
+   ↓
+Pousando
+   ↓
+EmSolo
+```
+
+## Fluxo de Emergência
+
+```text
+Qualquer Estado
+        ↓
+  EmEmergencia
+        ↓
+ Prioridade Máxima
+        ↓
+ Pouso Emergencial
+```
+
+---
+
+# Instruções de Execução
+
+## Clonar o repositório
+
+```bash
+git clone <url-do-repositorio>
+cd SistemaGerenciamentoAeroporto
+```
+
+## Executar o sistema
+
+```bash
+python main.py
+```
+
+---
+
+# Testes
+
+Os testes encontram-se na pasta:
+
+```text
+Tests/
+```
+
+Para executar:
+
+```bash
+python -m pytest
+```
+
+Ou individualmente:
+
+```bash
+python Tests/test_aviao.py
+python Tests/test_controleVoo.py
+python Tests/test_pista.py
+python Tests/test_plataforma.py
+python Tests/test_planoVoo.py
+```
+
+---
+
+# Detalhamento de Aprendizado
+
+## Dificuldades Encontradas
+
+### Implementação do padrão State
+
+A principal dificuldade foi modelar corretamente as transições entre estados sem utilizar estruturas condicionais extensas.
+
+### Import Circular
+
+Alguns estados dependiam diretamente de outros estados, gerando dependências circulares.
+
+Exemplo:
+
+```text
+EmEmergencia → Pousando
+Pousando → EmEmergencia
+```
+
+## Como Resolvi
+
+Foram utilizados imports locais dentro dos métodos responsáveis pelas transições.
+
+Exemplo:
+
+```python
+def declararEmergencia(self):
+    from Models.States.EmEmergencia import EmEmergencia
+```
+
+Essa abordagem eliminou os ciclos de importação e manteve a arquitetura desacoplada.
+
+## Principal Aprendizado
+
+O desenvolvimento permitiu aprofundar conhecimentos em:
+
+- Programação Orientada a Objetos.
+- Modelagem de domínio.
+- State Pattern.
+- Observer Pattern.
+- Singleton.
+- Factory Method.
+- Coesão e acoplamento.
+- Organização arquitetural de sistemas.
+
+---
+
+# Declaração de Uso de IA
+
+Utilizei IA como ferramenta de apoio.
+
+### Ferramenta(s)
+
+- ChatGPT e BlackBox
+
+### Finalidade
+
+- Apoio na documentação.
+- Revisão arquitetural.
+- Esclarecimento de conceitos de POO.
+- Validação de decisões de modelagem.
+- Organização e refinamento textual.
+
+### Validação
+
+Declaro que todo o código gerado foi lido, testado e ajustado conforme as necessidades específicas do projeto e da disciplina. A responsabilidade pela arquitetura, decisões de design e correção do código é de minha total responsabilidade.
+
+---
+
+# Autor
+
+Rafael Albuquerque de Paula
