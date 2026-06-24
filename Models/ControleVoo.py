@@ -10,9 +10,10 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
 
     def __new__(cls):
         if ControleVoo.__instancia is None:  # verifica se ele já foi instanciado
-            cls.__instancia = super().__new__(cls)  # cria uma instancia nova se ele ainda não foi instanciado
+            cls.__instancia = super().__new__(
+                cls
+            )  # cria uma instancia nova se ele ainda não foi instanciado
         return cls.__instancia
-
 
     def __init__(self):
         if not (ControleVoo.__inicializado):
@@ -21,7 +22,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
             self._filaPouso: list[Aviao] = []
             self._filaDecolagem: list[Aviao] = []
             ControleVoo.__inicializado = True
-    
+
     @property
     def historicoContato(self):
         return self._historicoContato
@@ -37,7 +38,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
     @property
     def filaDecolagem(self):
         return self._filaDecolagem
-    
+
     def __eq__(self, controle: ControleVoo):
         if self is controle and isinstance(controle, ControleVoo):
             return True
@@ -47,7 +48,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
         self._historicoContato.append(notificacao)
         print(notificacao)
         if (
-            type(origem._status).__name__ == "EmEmergencia"
+            type(origem._status).__name__.lower() == "ememergencia"
         ):  # verifica se o aviao esta no estado de emergencia
             if origem in self._filaPouso:  # testa se ele ja solicitou o pouso
                 self._filaPouso.remove(
@@ -58,8 +59,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
                 0, origem
             )  # coloca ele como prioridade maxima na fila de pouso
 
-
-    #segunda ação de contato, coloca a aeronave na lista de pouso
+    # segunda ação de contato, coloca a aeronave na lista de pouso
     def solicitarPouso(
         self, aviao: Aviao
     ):  # solicita para torre a permissao para pouso e adiciona o aviao na lista de espera para pousar
@@ -78,7 +78,7 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
         print(f"Controle → {aviao._identificador}: Pouso solicitado.")
         return self._filaPouso.append(aviao)
 
-    #segunda ação de contato, coloca a aeronave na lista de decolagem
+    # segunda ação de contato, coloca a aeronave na lista de decolagem
     def solicitarDecolagem(
         self, aviao: Aviao
     ):  # solicita para torre a permissao para decolar e adiciona o aviao na lista de espera para decolagem
@@ -97,42 +97,35 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
         print(f"Controle → {aviao._identificador}: Decolagem solicitada.")
         return self._filaDecolagem.append(aviao)
 
-
-    def autorizarPouso(
-        self, aviao: Aviao
-    ):  # garante a autorizacao de pouso ao aviao e retira ele da fila de pouso
-        if not isinstance(
-            aviao, Aviao
-        ):  # valida a instância para garantir que seja válida
+    def autorizarPouso(self, aviao: Aviao):
+        if not isinstance(aviao, Aviao):
             raise TypeError("ERROR: o objeto deve ser uma instância válida de Aviao.")
-        if (
-            not aviao in self._filaPouso
-        ):  # verifica se o objeto Aviao não está na lista de pouso
-
+        if aviao not in self._filaPouso:
             print(
                 f"ALERT: a aeronave {aviao.identificador} não está na lista de pouso do controle."
             )
             return
-        return self._filaPouso.remove(aviao)
+        if self._filaPouso[0] != aviao:
+            print(
+                f"ALERT: a aeronave {aviao.identificador} não é a primeira da fila de pouso."
+            )
+            return
+        self._filaPouso.pop(0)
 
-
-    def autorizarDecolagem(
-        self, aviao: Aviao
-    ):  # solicita para torre a permissao para pouso e adiciona o aviao na lista de espera para pousar
-        if not isinstance(
-            aviao, Aviao
-        ):  # valida a instância para garantir que seja válida
+    def autorizarDecolagem(self, aviao: Aviao):
+        if not isinstance(aviao, Aviao):
             raise TypeError("ERROR: o objeto deve ser uma instância válida de Aviao.")
-        if (
-            not aviao in self._filaDecolagem
-        ):  # verifica se o objeto Aviao já está na lista de pouso
-
+        if aviao not in self._filaDecolagem:
             print(
                 f"ALERT: a aeronave {aviao.identificador} não está na lista de decolagem do controle."
             )
             return
-        return self._filaDecolagem.remove(aviao)
-
+        if self._filaDecolagem[0] != aviao:
+            print(
+                f"ALERT: a aeronave {aviao.identificador} não é a primeira da fila de decolagem."
+            )
+            return
+        self._filaDecolagem.pop(0)
 
     def adicionarAeronave(
         self, aviao: Aviao
@@ -146,7 +139,6 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
             )
             return
         return self._aeronaves.append(aviao)  # adiciona a aeronave da lista
-
 
     def removerAeronave(
         self, aviao: Aviao

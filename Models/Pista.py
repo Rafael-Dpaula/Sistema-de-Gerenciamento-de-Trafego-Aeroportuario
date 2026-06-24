@@ -22,7 +22,7 @@ class Pista:
     @aviao.setter
     def aviao(self, novoAvi):
         if not novoAvi is None and isinstance(novoAvi, Aviao):
-            self._codigo = novoAvi
+            self._aviao = novoAvi
         else:
             raise ValueError("ERROR: novoAvi não é válido.")
 
