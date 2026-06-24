@@ -27,7 +27,7 @@ centro = CentroOperacional(aeroporto, controle)
 controle.adicionarAeronave(carga)
 carga.definirPlano(plano)
 
-# aviao solicita -> controle solicita -> centro autoriza ->
+# aviao solicita -> controle solicita -> centro autoriza -> centro processa
 carga.solicitarDecolagem()
 # print(type(carga._status).__name__)
 controle.solicitarDecolagem(carga)
