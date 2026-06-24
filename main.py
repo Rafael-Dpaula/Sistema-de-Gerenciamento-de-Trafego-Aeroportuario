@@ -254,7 +254,7 @@ def menuManipulacao():
             return menuManipulacao()
         platUtilizada = None
         for plat in aeroportoSelecionado._plataformas:
-            if plataforma._aviao is aviao:
+            if plat._aviao is aviao:
                 platUtilizada = plat
                 break
         platUtilizada.liberar()
