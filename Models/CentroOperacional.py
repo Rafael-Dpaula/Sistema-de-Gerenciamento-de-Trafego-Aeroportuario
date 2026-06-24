@@ -47,6 +47,7 @@ class CentroOperacional:
             return
         pista.ocupar(aviao)
         self._controleVoo.autorizarPouso(aviao)
+        print(aviao.pousar())
         print(
             f"Controle → {aviao._identificador}: Pouso autorizado e pista liberada. Desça com cuidado!"
         )
@@ -78,6 +79,7 @@ class CentroOperacional:
         plataformaUtilizada.liberar()
         pista.ocupar(aviao)
         self._controleVoo.autorizarDecolagem(aviao)
+        print(aviao.decolar())
         print(
             f"Controle → {aviao._identificador}: Decolagem autorizada. Taxeie até a pista reservada."
         )

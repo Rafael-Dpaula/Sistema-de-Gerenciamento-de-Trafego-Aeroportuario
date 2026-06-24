@@ -15,9 +15,9 @@ class AguardandoDecolagem(StateAviao):
         )
 
     def decolar(self):
-        from Models.States.EmVoo import EmVoo
+        from Models.States.Decolando import Decolando
         return informandoControle(
-            EmVoo(),
+            Decolando(),
             f"Decolagem autorizada. Procedimento liberado.",
         )
 
