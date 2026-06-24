@@ -67,6 +67,8 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
             aviao, Aviao
         ):  # valida a instância para garantir que seja válida
             raise TypeError("ERROR: o objeto deve ser uma instância válida de Aviao.")
+        if type(aviao._status).__name__.lower() == "emsolo":
+            return
         if (
             aviao in self._filaPouso
         ):  # verifica se o objeto Aviao já está na lista de pouso
@@ -86,6 +88,8 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
             aviao, Aviao
         ):  # valida a instância para garantir que seja válida
             raise TypeError("ERROR: o objeto deve ser uma instância válida de Aviao.")
+        if aviao._planoVoo is None:
+            return
         if (
             aviao in self._filaDecolagem
         ):  # verifica se o objeto Aviao já está na lista de decolagem
@@ -105,12 +109,11 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
                 f"ALERT: a aeronave {aviao.identificador} não está na lista de pouso do controle."
             )
             return
-        if self._filaPouso[0] != aviao:
+        if self._filaPouso[0] is not aviao:
             print(
                 f"ALERT: a aeronave {aviao.identificador} não é a primeira da fila de pouso."
             )
             return
-        self._filaPouso.pop(0)
 
     def autorizarDecolagem(self, aviao: Aviao):
         if not isinstance(aviao, Aviao):
@@ -125,7 +128,6 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
                 f"ALERT: a aeronave {aviao.identificador} não é a primeira da fila de decolagem."
             )
             return
-        self._filaDecolagem.pop(0)
 
     def adicionarAeronave(
         self, aviao: Aviao
@@ -146,11 +148,11 @@ class ControleVoo(Observer):  # classe singleton que controla o observer
         if not isinstance(aviao, Aviao):  # valida se a aeronave é uma instancia válida
             raise TypeError("ERROR: o objeto deve ser uma instância válida de Aviao")
         if aviao not in self._aeronaves:  # busca se a aeronava está na lista
-
             print(
                 f"ALERT: a aeronave {aviao.identificador} não se encontra na lista de aeronaves do controle"
             )
-            self._aeronaves.remove(aviao)
+            return
+        self._aeronaves.remove(aviao)
 
     def __str__(self):
         return f"===== CONTROLE DE VOO =====\nHistorico de contato: {[h for h in self._historicoContato]}\nAeronaves: {[a._identificador for a in self._aeronaves]}\nFila de Pouso: {[fp._identificador for fp in self._filaPouso]}\nFila de Decolagem: {[fd._identificador for fd in self._filaDecolagem]}\n==========================="

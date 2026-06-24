@@ -109,6 +109,9 @@ class Aviao(ABC):  # CLASSE PRINCIPAL DO PROJETO, CENTRO DE TODAS AS OPERAÇÕES
         self.notificarObservers(msg)  # informa a mudança do status aos observadores
 
     def solicitarPouso(self):  # pedido da aeronave para a torre para pousar
+        if type(self._status).__name__.lower() == "emsolo":
+            print("ALERT: aeronave já se encontra em solo.")
+            return ""
         resultado = self._status.solicitarPouso()
         self.alterarStatus(resultado)
         return f"Controle → {self._identificador}: {resultado.mensagem}"
